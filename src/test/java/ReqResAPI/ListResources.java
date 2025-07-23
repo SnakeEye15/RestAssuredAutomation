@@ -13,7 +13,7 @@ public class ListResources {
         baseURI="https://reqres.in";
     }
     @Test
-    public void Test_listResources(){
+    public void Test_listResources_all(){
 
         Response response=
                 given()
@@ -30,6 +30,32 @@ public class ListResources {
 
         int total=response.jsonPath().getInt("total");
         assertEquals(12,total);
+    }
+    @Test
+    public void Test_SingleResource(){
+        Response response=
+                (Response) given()
+                        .when()
+                        .get("/api/unknown/2")
+                        .then()
+                        .statusCode(200)
+                        .body("data.id",equalTo(2))
+                        .body("data.name",equalTo("fuchsia rose"))
+                        .extract().response();
+        System.out.println("Response:\n"+response.prettyPrint());
+
+
+
+    }
+    @Test
+    public void Test_ResourceNotFound(){
+        Response response=
+                given()
+                        .when()
+                        .get("/api/unknown/23")
+                        .then()
+                        .statusCode(404)
+                        .extract().response();
     }
 
 }
